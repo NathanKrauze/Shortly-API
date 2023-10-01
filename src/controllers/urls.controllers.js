@@ -16,7 +16,7 @@ export async function postUrl(req, res) {
         if(!session.rows[0]) return res.status(401).send("Unauthorized");
 
         await db.query(`INSERT INTO "shortenedUrls" ("userId", url, "shortUrl") VALUES ($1, $2, $3);`,[session.rows[0].userId, url, shortUrl]);
-        const shortenedUrl = await db.query(`SELECT id, "shortUrl" FROM "shortenedUrls" WHERE "userId"  = $1`,[session.rows[0].userId])
+        const shortenedUrl = await db.query(`SELECT id, "shortUrl" FROM "shortenedUrls" WHERE "userId"  = $1`,[session.rows[0].userId]);
         res.status(201).send(shortenedUrl.rows[0]);
     }catch (err){
         res.status(500).send(err.message);
@@ -24,8 +24,10 @@ export async function postUrl(req, res) {
 }
 
 export async function getUrlById(req, res) {
+    const {id} = req.params;
     try{
-
+        const url = await db.query(`SELECT id, "shortUrl", url FROM  "shortenedUrls" WHERE id = $1`,[id]);
+        res.status(200).send(url.rows[0])
     }catch (err){
         res.status(500).send(err.message);
     }
