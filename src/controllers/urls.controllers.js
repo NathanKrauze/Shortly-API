@@ -34,8 +34,11 @@ export async function getUrlById(req, res) {
 }
 
 export async function openUrl(req, res) {
+    const {shortUrl} = req.params;  
     try{
-
+        const url = await db.query(`SELECT url FROM "shortenedUrls" WHERE "shortUrl" = $1`,[shortUrl]);
+        if(!url.rows[0]) return res.status(404).send('url not founded');
+        res.redirect(url.rows[0].url);
     }catch (err){
         res.status(500).send(err.message);
     }
