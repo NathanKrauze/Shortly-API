@@ -5,7 +5,7 @@
 -- Dumped from database version 14.9 (Ubuntu 14.9-0ubuntu0.22.04.1)
 -- Dumped by pg_dump version 14.9 (Ubuntu 14.9-0ubuntu0.22.04.1)
 
--- Started on 2023-10-01 13:23:54 -03
+-- Started on 2023-10-01 21:28:13 -03
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -50,7 +50,7 @@ CREATE SEQUENCE public.sessions_id_seq
 
 
 --
--- TOC entry 3379 (class 0 OID 0)
+-- TOC entry 3380 (class 0 OID 0)
 -- Dependencies: 211
 -- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -59,7 +59,7 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
--- TOC entry 214 (class 1259 OID 24722)
+-- TOC entry 214 (class 1259 OID 24753)
 -- Name: shortenedUrls; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -67,14 +67,14 @@ CREATE TABLE public."shortenedUrls" (
     id integer NOT NULL,
     "userId" integer NOT NULL,
     url text NOT NULL,
-    shortened text NOT NULL,
-    "visitCount" integer NOT NULL,
+    "shortUrl" text NOT NULL,
+    "visitCount" integer DEFAULT 0 NOT NULL,
     "createdAt" date DEFAULT now()
 );
 
 
 --
--- TOC entry 213 (class 1259 OID 24721)
+-- TOC entry 213 (class 1259 OID 24752)
 -- Name: shortenedUrls_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -88,7 +88,7 @@ CREATE SEQUENCE public."shortenedUrls_id_seq"
 
 
 --
--- TOC entry 3380 (class 0 OID 0)
+-- TOC entry 3381 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: shortenedUrls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -125,7 +125,7 @@ CREATE SEQUENCE public.users_id_seq
 
 
 --
--- TOC entry 3381 (class 0 OID 0)
+-- TOC entry 3382 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -142,7 +142,7 @@ ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.ses
 
 
 --
--- TOC entry 3223 (class 2604 OID 24725)
+-- TOC entry 3223 (class 2604 OID 24756)
 -- Name: shortenedUrls id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -158,7 +158,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- TOC entry 3230 (class 2606 OID 24715)
+-- TOC entry 3231 (class 2606 OID 24715)
 -- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -167,7 +167,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- TOC entry 3232 (class 2606 OID 24730)
+-- TOC entry 3233 (class 2606 OID 24762)
 -- Name: shortenedUrls shortenedUrls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -176,7 +176,7 @@ ALTER TABLE ONLY public."shortenedUrls"
 
 
 --
--- TOC entry 3226 (class 2606 OID 24705)
+-- TOC entry 3227 (class 2606 OID 24705)
 -- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -185,7 +185,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 3228 (class 2606 OID 24703)
+-- TOC entry 3229 (class 2606 OID 24703)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -194,7 +194,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 3233 (class 2606 OID 24716)
+-- TOC entry 3234 (class 2606 OID 24716)
 -- Name: sessions sessions_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -203,7 +203,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- TOC entry 3234 (class 2606 OID 24731)
+-- TOC entry 3235 (class 2606 OID 24763)
 -- Name: shortenedUrls shortenedUrls_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -211,7 +211,7 @@ ALTER TABLE ONLY public."shortenedUrls"
     ADD CONSTRAINT "shortenedUrls_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
--- Completed on 2023-10-01 13:23:54 -03
+-- Completed on 2023-10-01 21:28:13 -03
 
 --
 -- PostgreSQL database dump complete
