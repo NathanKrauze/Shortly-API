@@ -26,7 +26,7 @@ export async function postUrl(req, res) {
 export async function getUrlById(req, res) {
     const {id} = req.params;
     try{
-        const url = await db.query(`SELECT id, "shortUrl", url FROM  "shortenedUrls" WHERE id = $1`,[id]);
+        const url = await db.query(`SELECT id, "shortUrl", url, "createdAt" FROM  "shortenedUrls" WHERE id = $1`,[id]);
         res.status(200).send(url.rows[0])
     }catch (err){
         res.status(500).send(err.message);
