@@ -40,8 +40,25 @@ export async function signIn(req, res) {
 }
 
 export async function getUserInfo(req, res) {
-    try{
 
+    const { authorization } = req.headers;
+    const token = authorization?.replace("Bearer ", "");
+    if (!token) return response.status(401).send("Token not sended");
+
+    try{
+        const session = await db.query(`SELECT token, "userId" FROM sessions WHERE token = $1;`,[token]);
+        if(!session.rows[0]) return res.status(401).send("Unauthorized");
+
+        const userInfo = await db.query(`
+            SELECT users.id, users.name, SUM("visitCount") AS "visitCount" FROM "shortenedUrls"
+            JOIN users ON users.id = "shortenedUrls"."userId"
+            WHERE "userId" = $1
+            GROUP BY users.id;
+            `,[session.rows[0].userId]);
+
+        const shortenedUrls = await db.query(`SELECT id, "shortUrl", url, "visitCount" FROM "shortenedUrls" WHERE "userId" = $1;`,[userInfo.rows[0].id]);
+        const userData = {... userInfo.rows[0], shortenedUrls: shortenedUrls.rows};
+        res.send('ok')
     }catch (err){
         res.status(500).send(err.message)
     }

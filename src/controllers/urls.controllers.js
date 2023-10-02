@@ -16,7 +16,7 @@ export async function postUrl(req, res) {
         if(!session.rows[0]) return res.status(401).send("Unauthorized");
 
         await db.query(`INSERT INTO "shortenedUrls" ("userId", url, "shortUrl") VALUES ($1, $2, $3);`,[session.rows[0].userId, url, shortUrl]);
-        const shortenedUrl = await db.query(`SELECT id, "shortUrl" FROM "shortenedUrls" WHERE "userId"  = $1`,[session.rows[0].userId]);
+        const shortenedUrl = await db.query(`SELECT id, "shortUrl" FROM "shortenedUrls" WHERE "shortUrl"  = $1`,[shortUrl]);
         res.status(201).send(shortenedUrl.rows[0]);
     }catch (err){
         res.status(500).send(err.message);
@@ -37,8 +37,9 @@ export async function getUrlById(req, res) {
 export async function openUrl(req, res) {
     const {shortUrl} = req.params;  
     try{
-        const url = await db.query(`SELECT url FROM "shortenedUrls" WHERE "shortUrl" = $1`,[shortUrl]);
+        const url = await db.query(`SELECT id, url FROM "shortenedUrls" WHERE "shortUrl" = $1`,[shortUrl]);
         if(!url.rows[0]) return res.status(404).send('url not founded');
+        await db.query(`UPDATE "shortenedUrls" SET "visitCount" = "shortenedUrls"."visitCount"+1 WHERE id= $1;`,[url.rows[0].id])
         res.redirect(url.rows[0].url);
     }catch (err){
         res.status(500).send(err.message);
