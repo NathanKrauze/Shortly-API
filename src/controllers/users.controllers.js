@@ -58,7 +58,7 @@ export async function getUserInfo(req, res) {
 
         const shortenedUrls = await db.query(`SELECT id, "shortUrl", url, "visitCount" FROM "shortenedUrls" WHERE "userId" = $1;`,[userInfo.rows[0].id]);
         const userData = {... userInfo.rows[0], shortenedUrls: shortenedUrls.rows};
-        res.send('ok')
+        res.send(userData);
     }catch (err){
         res.status(500).send(err.message)
     }
